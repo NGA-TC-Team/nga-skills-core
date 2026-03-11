@@ -28,6 +28,7 @@ This skill should be used when the task involves **creating card news, Instagram
 ## Prerequisites
 
 This skill depends on:
+
 - `ui-ux-pro-max` skill (for design system recommendations)
 - Working directory already created by the user (Claude Code assumes it is running inside the target folder)
 
@@ -43,14 +44,14 @@ The user has already created the card news project folder and launched Claude Co
 
 Before asking the user for any content or color inputs, scan the working directory for the presence of optional folders and files:
 
-| Check Target         | Path                  |
-|----------------------|-----------------------|
-| Content document     | `docs/news.md`        |
-| User assets          | `assets/`             |
-| Brand identity       | `souls/`              |
-| Brand voice guide    | `souls/hearts.md`     |
-| Brand logo           | `souls/logo.*`        |
-| Slide templates      | `souls/templates/`    |
+| Check Target      | Path               |
+| ----------------- | ------------------ |
+| Content document  | `docs/news.md`     |
+| User assets       | `assets/`          |
+| Brand identity    | `souls/`           |
+| Brand voice guide | `souls/hearts.md`  |
+| Brand logo        | `souls/logo.*`     |
+| Slide templates   | `souls/templates/` |
 
 #### If any optional folders/files are missing:
 
@@ -74,46 +75,57 @@ Present a summary of what's missing and offer to scaffold them:
 Create all missing folders and starter files:
 
 **`docs/news.md`** — Starter content template:
+
 ```markdown
 # 카드뉴스 제목을 입력하세요
 
 여기에 카드뉴스의 전체 주제나 소개 문구를 작성하세요.
 
 ## 슬라이드 2 제목
+
 슬라이드 2의 내용을 작성하세요. 통계, 팁, 설명 등을 자유롭게 적어주세요.
 
 ## 슬라이드 3 제목
+
 슬라이드 3의 내용을 작성하세요.
 
 ## 슬라이드 4 제목
+
 슬라이드 4의 내용을 작성하세요.
 
 ## CTA
+
 마지막 슬라이드에 들어갈 행동 유도 문구를 작성하세요.
 ```
 
 **`souls/hearts.md`** — Starter voice guide:
+
 ```markdown
 # Brand Voice
 
 ## Tone
+
 - 여기에 원하는 말투/어조를 적어주세요
 - 예: 친근한 ~해요 체, 전문적이지만 쉬운 설명
 
 ## Key Expressions
+
 - 자주 사용할 표현을 적어주세요
 - 예: "쉽게 말해서...", "핵심만 정리하면"
 
 ## Values
+
 - 콘텐츠에서 중시하는 가치를 적어주세요
 - 예: 실용성, 정확성, 포용
 
 ## Avoid
+
 - 피해야 할 표현이나 스타일을 적어주세요
 - 예: 과도한 과장, 딱딱한 격식체
 ```
 
 **`assets/`** — Empty folder (with a `.gitkeep` or note):
+
 ```
 assets/ 폴더를 생성했습니다.
 슬라이드에 사용할 이미지를 여기에 넣어주세요.
@@ -122,6 +134,7 @@ assets/ 폴더를 생성했습니다.
 ```
 
 **`souls/templates/`** — Empty folder:
+
 ```
 souls/templates/ 폴더를 생성했습니다.
 슬라이드 템플릿(HTML 또는 이미지)을 여기에 넣어주세요.
@@ -147,6 +160,7 @@ If starter files were created, inform the user:
 ```
 
 The user can either:
+
 1. **Fill in the files** and re-run → Step 1 picks up the completed files
 2. **Proceed immediately** → Empty/starter files are ignored, fallback to conversation-based input
 
@@ -182,23 +196,24 @@ From the two base colors in `theme.json`, generate a **10-step color grade palet
 
 From `brandColor`, generate shades `50` through `950`:
 
-| Token       | Method                                      | Usage                        |
-|-------------|---------------------------------------------|------------------------------|
-| `brand-50`  | Lightest tint (mix 95% white)               | Subtle backgrounds           |
-| `brand-100` | Very light tint (mix 90% white)             | Hover states, light fills    |
-| `brand-200` | Light tint (mix 75% white)                  | Borders, secondary elements  |
-| `brand-300` | Medium-light (mix 55% white)                | Icons, decorative            |
-| `brand-400` | Medium (mix 30% white)                      | Secondary buttons            |
-| `brand-500` | **Base** = `brandColor` as-is               | Primary CTA, key accents     |
-| `brand-600` | Medium-dark (mix 15% black)                 | Hover on primary             |
-| `brand-700` | Dark (mix 30% black)                        | Active/pressed state         |
-| `brand-800` | Very dark (mix 50% black)                   | Dark mode accent             |
-| `brand-900` | Darkest (mix 70% black)                     | Dark mode backgrounds        |
-| `brand-950` | Near-black (mix 85% black)                  | Ultra-dark surfaces          |
+| Token       | Method                          | Usage                       |
+| ----------- | ------------------------------- | --------------------------- |
+| `brand-50`  | Lightest tint (mix 95% white)   | Subtle backgrounds          |
+| `brand-100` | Very light tint (mix 90% white) | Hover states, light fills   |
+| `brand-200` | Light tint (mix 75% white)      | Borders, secondary elements |
+| `brand-300` | Medium-light (mix 55% white)    | Icons, decorative           |
+| `brand-400` | Medium (mix 30% white)          | Secondary buttons           |
+| `brand-500` | **Base** = `brandColor` as-is   | Primary CTA, key accents    |
+| `brand-600` | Medium-dark (mix 15% black)     | Hover on primary            |
+| `brand-700` | Dark (mix 30% black)            | Active/pressed state        |
+| `brand-800` | Very dark (mix 50% black)       | Dark mode accent            |
+| `brand-900` | Darkest (mix 70% black)         | Dark mode backgrounds       |
+| `brand-950` | Near-black (mix 85% black)      | Ultra-dark surfaces         |
 
 #### Neutral Color Palette
 
 From `neutralBaseColor`, generate the same `50–950` scale. Used for:
+
 - Backgrounds (50–100)
 - Borders & dividers (200–300)
 - Secondary text (400–500)
@@ -222,6 +237,7 @@ Generate these palettes as CSS custom properties inside the output `index.html`:
 ```
 
 The palette generation logic should use **HSL manipulation**:
+
 1. Convert the base hex to HSL
 2. For lighter shades: increase lightness, slightly decrease saturation
 3. For darker shades: decrease lightness, slightly increase saturation
@@ -241,33 +257,39 @@ If `souls/hearts.md` exists, read it and apply its directives to **all generated
 # Brand Voice
 
 ## Tone
+
 - 친근하고 유머러스한 말투 (casual, witty)
 - ~해요 체 사용
 - 전문 용어는 쉽게 풀어서 설명
 
 ## Key Expressions
+
 - "쉽게 말해서..."
 - "이거 모르면 손해예요"
 - "딱 3분이면 됩니다"
 
 ## Values
+
 - 실용성 우선: 이론보다 바로 쓸 수 있는 팁
 - 포용: 초보자도 이해할 수 있는 난이도
 - 솔직함: 과장 없이 사실 기반
 
 ## Avoid
+
 - 딱딱한 격식체
 - 과도한 영어 남용
 - 근거 없는 과장 ("혁신적인", "게임 체인저")
 ```
 
 **Parsing rules:**
+
 - `## Tone` → 전체 슬라이드 텍스트의 말투/어조 결정
 - `## Key Expressions` → 콘텐츠 작성 시 이 표현들을 자연스럽게 활용
 - `## Values` → 콘텐츠 방향성과 우선순위 가이드
 - `## Avoid` → 이 항목에 해당하는 표현/스타일 금지
 
 **적용 방식:**
+
 - `docs/news.md`가 있을 때: 원본 내용의 팩트는 유지하되, `hearts.md`의 톤/표현에 맞게 **표현을 다듬어** 슬라이드에 반영
 - `docs/news.md`가 없을 때 (유저 프롬프트 기반): 콘텐츠를 **처음부터 hearts.md의 보이스로 생성**
 - 커버 타이틀, CTA 문구에도 보이스 가이드 반영
@@ -276,16 +298,17 @@ If `souls/hearts.md` exists, read it and apply its directives to **all generated
 
 If a logo file exists (`souls/logo.png`, `souls/logo.svg`, `souls/logo.jpg`), apply it to slides:
 
-| Slide     | Logo Placement                                          |
-|-----------|---------------------------------------------------------|
-| Cover     | Top-left or top area, paired with brand tag             |
-| CTA       | Top-left or bottom area, reinforces brand identity      |
-| Content   | Not placed (keeps slides clean and content-focused)     |
+| Slide   | Logo Placement                                      |
+| ------- | --------------------------------------------------- |
+| Cover   | Top-left or top area, paired with brand tag         |
+| CTA     | Top-left or bottom area, reinforces brand identity  |
+| Content | Not placed (keeps slides clean and content-focused) |
 
 **Logo CSS rules:**
+
 ```css
 .slide-logo {
-  height: 40px;  /* constrain by height, auto width */
+  height: 40px; /* constrain by height, auto width */
   width: auto;
   object-fit: contain;
   display: block;
@@ -293,6 +316,7 @@ If a logo file exists (`souls/logo.png`, `souls/logo.svg`, `souls/logo.jpg`), ap
 ```
 
 **Logo reference in HTML:**
+
 ```html
 <img src="souls/logo.png" alt="Brand logo" class="slide-logo" />
 ```
@@ -348,18 +372,18 @@ Each HTML template is a standalone snippet representing one slide's inner struct
 
 **Available placeholder tokens:**
 
-| Token            | Replaced With                                    |
-|------------------|--------------------------------------------------|
-| `{{LOGO}}`       | `<img>` tag with logo from `souls/`, or empty    |
-| `{{BRAND_TAG}}`  | Brand name or tag text                           |
-| `{{TITLE}}`      | Slide title (from `docs/news.md` or generated)   |
-| `{{SUBTITLE}}`   | Slide subtitle/description                       |
-| `{{BODY}}`       | Main body content text                           |
-| `{{ITEMS}}`      | Repeated list items (tips, features, stats)      |
-| `{{IMAGE}}`      | `<img>` tag from `assets/`, or empty             |
-| `{{SLIDE_NUM}}`  | Formatted slide number (e.g., "01 / 07")         |
-| `{{ISSUE}}`      | Issue date/number string                         |
-| `{{COVER_BG}}`   | Cover background image `<img>` or empty          |
+| Token           | Replaced With                                  |
+| --------------- | ---------------------------------------------- |
+| `{{LOGO}}`      | `<img>` tag with logo from `souls/`, or empty  |
+| `{{BRAND_TAG}}` | Brand name or tag text                         |
+| `{{TITLE}}`     | Slide title (from `docs/news.md` or generated) |
+| `{{SUBTITLE}}`  | Slide subtitle/description                     |
+| `{{BODY}}`      | Main body content text                         |
+| `{{ITEMS}}`     | Repeated list items (tips, features, stats)    |
+| `{{IMAGE}}`     | `<img>` tag from `assets/`, or empty           |
+| `{{SLIDE_NUM}}` | Formatted slide number (e.g., "01 / 07")       |
+| `{{ISSUE}}`     | Issue date/number string                       |
+| `{{COVER_BG}}`  | Cover background image `<img>` or empty        |
 
 #### Image Templates (`.png`, `.jpg`, `.svg`, etc.)
 
@@ -386,7 +410,7 @@ Image templates are **static visual frames** — pre-designed slide backgrounds 
 .slide-template-content {
   position: relative;
   z-index: 1;
-  padding: 80px;          /* default safe zone */
+  padding: 80px; /* default safe zone */
   width: 100%;
   height: 100%;
   display: flex;
@@ -396,6 +420,7 @@ Image templates are **static visual frames** — pre-designed slide backgrounds 
 ```
 
 **Image reference in HTML:**
+
 ```html
 <div class="slide">
   <img src="souls/templates/cover.png" alt="" class="slide-template-bg" />
@@ -408,6 +433,7 @@ Image templates are **static visual frames** — pre-designed slide backgrounds 
 ```
 
 **Text readability on image templates:**
+
 - If the image template is **dark** (detected or assumed): use light text (`--neutral-50`)
 - If the image template is **light**: use dark text (`--neutral-900`)
 - If readability is uncertain: apply a semi-transparent overlay between the image and text:
@@ -416,7 +442,7 @@ Image templates are **static visual frames** — pre-designed slide backgrounds 
 .slide-template-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.35);  /* or rgba(255,255,255,0.4) for light */
+  background: rgba(0, 0, 0, 0.35); /* or rgba(255,255,255,0.4) for light */
   z-index: 0;
 }
 ```
@@ -425,10 +451,10 @@ Image templates are **static visual frames** — pre-designed slide backgrounds 
 
 If both `cover.html` and `cover.png` exist for the same slide type:
 
-| Priority | Format | Behavior                                              |
-|----------|--------|-------------------------------------------------------|
-| 1st      | HTML   | HTML template takes priority (more flexible)          |
-| 2nd      | Image  | Used only if no HTML template exists for this type    |
+| Priority | Format | Behavior                                           |
+| -------- | ------ | -------------------------------------------------- |
+| 1st      | HTML   | HTML template takes priority (more flexible)       |
+| 2nd      | Image  | Used only if no HTML template exists for this type |
 
 #### Template Matching Rules
 
@@ -478,18 +504,22 @@ Check if `docs/news.md` exists. If it does, read it and use its content as the c
 Overall topic or headline for the card news.
 
 ## Slide 2 Title
+
 Content for slide 2. Can include paragraphs, bullet points, statistics, etc.
 
 ## Slide 3 Title
+
 Content for slide 3.
 
 ## Slide 4 Title
+
 Content for slide 4.
 
 <!-- Add more ## sections for more slides -->
 ```
 
 **Parsing rules:**
+
 - `# H1` → Cover slide title (Slide 1)
 - The paragraph directly under `# H1` (before the first `## H2`) → Cover subtitle/description
 - Each `## H2` → One content slide (Slide 2, 3, 4, ...)
@@ -499,6 +529,7 @@ Content for slide 4.
 - Supported inline formats: `**bold**`, `*italic*`, `> blockquote` (for pull quotes), `- list items` (for tip lists)
 
 **When `souls/hearts.md` is also present:**
+
 - Keep the factual content from `docs/news.md` intact
 - Adjust **tone, expressions, and wording** to match the voice guide
 - Example: if `news.md` says "Claude Code는 터미널 기반 AI 코딩 도구입니다" and `hearts.md` specifies casual tone → output becomes "쉽게 말해서, 터미널에서 바로 쓸 수 있는 AI 코딩 도구예요"
@@ -540,11 +571,11 @@ Check if the `assets/` folder exists and contains image files.
 
 A special asset can be designated as the **cover slide's background image** using a naming convention:
 
-| Filename Pattern                  | Behavior                                      |
-|-----------------------------------|-----------------------------------------------|
-| `cover.png`, `cover.jpg`, etc.    | Used as Cover (Slide 1) background image      |
-| `bg.png`, `bg.jpg`, etc.          | Used as Cover (Slide 1) background image      |
-| `cover-bg.png`, `cover-bg.jpg`    | Used as Cover (Slide 1) background image      |
+| Filename Pattern               | Behavior                                 |
+| ------------------------------ | ---------------------------------------- |
+| `cover.png`, `cover.jpg`, etc. | Used as Cover (Slide 1) background image |
+| `bg.png`, `bg.jpg`, etc.       | Used as Cover (Slide 1) background image |
+| `cover-bg.png`, `cover-bg.jpg` | Used as Cover (Slide 1) background image |
 
 - Only **one** cover background image is used (first match wins in the order above)
 - The image is placed as a **full-bleed background** with a dimmed overlay to ensure text readability:
@@ -583,13 +614,13 @@ A special asset can be designated as the **cover slide's background image** usin
 
 All remaining images (not matching cover patterns) are mapped to content slides:
 
-| Asset (sorted)  | Target Slide | Notes                              |
-|------------------|--------------|------------------------------------|
-| 1st image file   | Slide 2      | First content slide after cover    |
-| 2nd image file   | Slide 3      | Second content slide               |
-| 3rd image file   | Slide 4      | Third content slide                |
-| ...              | ...          | Continues sequentially             |
-| Nth image file   | Slide N+1    | If more images than content slides, extras are ignored |
+| Asset (sorted) | Target Slide | Notes                                                  |
+| -------------- | ------------ | ------------------------------------------------------ |
+| 1st image file | Slide 2      | First content slide after cover                        |
+| 2nd image file | Slide 3      | Second content slide                                   |
+| 3rd image file | Slide 4      | Third content slide                                    |
+| ...            | ...          | Continues sequentially                                 |
+| Nth image file | Slide N+1    | If more images than content slides, extras are ignored |
 
 - **Last Slide (CTA)**: Does not receive an asset image — CTA uses typography-only design
 - If there are **fewer images** than content slides, remaining slides render without images (text-only layout)
@@ -599,16 +630,17 @@ All remaining images (not matching cover patterns) are mapped to content slides:
 
 When an image is assigned to a slide, it can be placed in one of these layout modes (choose based on content length):
 
-| Layout Mode        | Image Size              | Text Position         | Best When                    |
-|--------------------|-------------------------|-----------------------|------------------------------|
-| `hero-image`       | Full width, 60% height  | Below image, 40%      | Short text, impactful visual |
-| `split-horizontal` | Left 50%, full height   | Right 50%             | Medium text + image          |
-| `background-cover`  | Full slide, dimmed overlay | Centered on top     | Minimal text, strong visual  |
-| `top-caption`      | Full width, 50% height  | Above image, 50%      | Title-heavy + supporting image |
+| Layout Mode        | Image Size                 | Text Position    | Best When                      |
+| ------------------ | -------------------------- | ---------------- | ------------------------------ |
+| `hero-image`       | Full width, 60% height     | Below image, 40% | Short text, impactful visual   |
+| `split-horizontal` | Left 50%, full height      | Right 50%        | Medium text + image            |
+| `background-cover` | Full slide, dimmed overlay | Centered on top  | Minimal text, strong visual    |
+| `top-caption`      | Full width, 50% height     | Above image, 50% | Title-heavy + supporting image |
 
 Default layout mode: `hero-image`
 
 **Image CSS rules:**
+
 ```css
 .slide-image {
   width: 100%;
@@ -619,6 +651,7 @@ Default layout mode: `hero-image`
 ```
 
 **Image reference in HTML:**
+
 ```html
 <img src="assets/1.png" alt="Slide visual" class="slide-image" />
 ```
@@ -636,6 +669,7 @@ python3 ~/.agents/skills/ui-ux-pro-max/scripts/search.py "<topic> <tone> editori
 ```
 
 Apply the returned recommendations for:
+
 - Typography pairing (Google Fonts)
 - Layout style (editorial grid, bold typography, minimalism, etc.)
 - Effects and spacing guidelines
@@ -646,23 +680,23 @@ Create a single `index.html` file containing all slides. Follow these specificat
 
 #### Slide Specifications
 
-| Property      | Value                |
-|---------------|----------------------|
-| Width         | 1080px               |
-| Height        | 1350px               |
-| Aspect Ratio  | 4:5 (Instagram std)  |
-| Border Radius | 0px (editorial)      |
-| Overflow      | hidden               |
+| Property      | Value               |
+| ------------- | ------------------- |
+| Width         | 1080px              |
+| Height        | 1350px              |
+| Aspect Ratio  | 4:5 (Instagram std) |
+| Border Radius | 0px (editorial)     |
+| Overflow      | hidden              |
 
 #### Slide Structure Template
 
 Each card news should include these slide types (adjust based on content):
 
-| Slide | Type     | Purpose                                  | Image                           | Logo |
-|-------|----------|------------------------------------------|---------------------------------|------|
-| 1     | Cover    | Title + brand tag + visual hook          | Cover BG from `assets/` (optional) | Yes (from `souls/`) |
-| 2–N-1 | Content  | Key points, stats, tips, quotes          | Yes (from `assets/` if available) | No   |
-| N     | CTA/End  | Call to action, follow, share prompt     | No (typography-only)            | Yes (from `souls/`) |
+| Slide | Type    | Purpose                              | Image                              | Logo                |
+| ----- | ------- | ------------------------------------ | ---------------------------------- | ------------------- |
+| 1     | Cover   | Title + brand tag + visual hook      | Cover BG from `assets/` (optional) | Yes (from `souls/`) |
+| 2–N-1 | Content | Key points, stats, tips, quotes      | Yes (from `assets/` if available)  | No                  |
+| N     | CTA/End | Call to action, follow, share prompt | No (typography-only)               | Yes (from `souls/`) |
 
 #### Required Design Rules
 
@@ -720,7 +754,7 @@ At the bottom of the page (after all slides), render a fixed-position or inline 
 
 ```javascript
 async function exportSlides(format, quality, prefix) {
-  const slides = document.querySelectorAll('.slide');
+  const slides = document.querySelectorAll(".slide");
   const zip = new JSZip();
 
   for (let i = 0; i < slides.length; i++) {
@@ -728,7 +762,7 @@ async function exportSlides(format, quality, prefix) {
 
     // Reset any preview scaling before capture
     const originalTransform = slide.style.transform;
-    slide.style.transform = 'none';
+    slide.style.transform = "none";
 
     const canvas = await html2canvas(slide, {
       width: 1080,
@@ -740,19 +774,19 @@ async function exportSlides(format, quality, prefix) {
 
     slide.style.transform = originalTransform;
 
-    const num = String(i + 1).padStart(2, '0');
-    const ext = format === 'png' ? 'png' : 'jpg';
-    const mimeType = format === 'png' ? 'image/png' : 'image/jpeg';
+    const num = String(i + 1).padStart(2, "0");
+    const ext = format === "png" ? "png" : "jpg";
+    const mimeType = format === "png" ? "image/png" : "image/jpeg";
 
-    const blob = await new Promise(resolve =>
-      canvas.toBlob(resolve, mimeType, quality)
+    const blob = await new Promise((resolve) =>
+      canvas.toBlob(resolve, mimeType, quality),
     );
 
     zip.file(`${prefix}-${num}.${ext}`, blob);
   }
 
-  const zipBlob = await zip.generateAsync({ type: 'blob' });
-  const link = document.createElement('a');
+  const zipBlob = await zip.generateAsync({ type: "blob" });
+  const link = document.createElement("a");
   link.href = URL.createObjectURL(zipBlob);
   link.download = `${prefix}.zip`;
   link.click();
@@ -792,6 +826,7 @@ async function exportSlides(format, quality, prefix) {
 ```
 
 **Modal Styling Rules:**
+
 - Backdrop: `rgba(0,0,0,0.6)` with `backdrop-filter: blur(4px)`
 - Content panel: Use `--neutral-50` background, `--neutral-900` text
 - Buttons: Primary download button uses `--brand-500`, cancel uses `--neutral-200`
@@ -833,64 +868,64 @@ The expected working directory structure:
 
 ## Input Sources Summary
 
-| Source              | Location                | Required | Purpose                                          |
-|---------------------|-------------------------|----------|--------------------------------------------------|
-| `theme.json`        | `./theme.json`          | Yes*     | Brand + neutral base colors (*created if absent) |
-| `docs/news.md`      | `./docs/news.md`        | No       | Card news content in markdown                    |
-| `assets/`           | `./assets/`             | No       | Slide images + cover background                  |
-| `souls/hearts.md`   | `./souls/hearts.md`     | No       | Brand voice guide (tone, expressions, values)    |
-| `souls/logo.png`    | `./souls/logo.*`        | No       | Brand logo for Cover + CTA                       |
-| `souls/templates/`  | `./souls/templates/`    | No       | Slide templates: HTML (dynamic) or image (static background) |
-| User prompt         | Conversation            | Fallback | Topic, slide count, tone (if no news.md)         |
+| Source             | Location             | Required | Purpose                                                      |
+| ------------------ | -------------------- | -------- | ------------------------------------------------------------ |
+| `theme.json`       | `./theme.json`       | Yes\*    | Brand + neutral base colors (\*created if absent)            |
+| `docs/news.md`     | `./docs/news.md`     | No       | Card news content in markdown                                |
+| `assets/`          | `./assets/`          | No       | Slide images + cover background                              |
+| `souls/hearts.md`  | `./souls/hearts.md`  | No       | Brand voice guide (tone, expressions, values)                |
+| `souls/logo.png`   | `./souls/logo.*`     | No       | Brand logo for Cover + CTA                                   |
+| `souls/templates/` | `./souls/templates/` | No       | Slide templates: HTML (dynamic) or image (static background) |
+| User prompt        | Conversation         | Fallback | Topic, slide count, tone (if no news.md)                     |
 
 ## Content Source Priority
 
-| Priority | Source          | Slide Count                     | Voice                                    |
-|----------|-----------------|--------------------------------|------------------------------------------|
-| 1st      | `docs/news.md`  | Auto (parsed from ## headings) | `hearts.md` if exists, else editorial    |
-| 2nd      | User prompt     | User chooses (default 5)       | `hearts.md` if exists, else user's choice |
+| Priority | Source         | Slide Count                    | Voice                                     |
+| -------- | -------------- | ------------------------------ | ----------------------------------------- |
+| 1st      | `docs/news.md` | Auto (parsed from ## headings) | `hearts.md` if exists, else editorial     |
+| 2nd      | User prompt    | User chooses (default 5)       | `hearts.md` if exists, else user's choice |
 
 ## Asset Mapping Summary
 
-| Condition                          | Behavior                                              |
-|------------------------------------|-------------------------------------------------------|
-| `cover.png`/`bg.png` exists        | Used as Cover background with dimmed overlay           |
-| `assets/` exists with images       | Map sequentially to Slide 2, 3, 4, ... (skip cover & CTA) |
-| `assets/` exists but empty         | All slides use text-only layout                       |
-| `assets/` does not exist           | All slides use text-only layout                       |
-| More images than content slides    | Extra images ignored, show warning                    |
-| Fewer images than content slides   | Remaining content slides use text-only layout         |
+| Condition                        | Behavior                                                  |
+| -------------------------------- | --------------------------------------------------------- |
+| `cover.png`/`bg.png` exists      | Used as Cover background with dimmed overlay              |
+| `assets/` exists with images     | Map sequentially to Slide 2, 3, 4, ... (skip cover & CTA) |
+| `assets/` exists but empty       | All slides use text-only layout                           |
+| `assets/` does not exist         | All slides use text-only layout                           |
+| More images than content slides  | Extra images ignored, show warning                        |
+| Fewer images than content slides | Remaining content slides use text-only layout             |
 
 ## `souls/` Application Summary
 
-| Component             | Effect When Present                                          | Effect When Absent           |
-|-----------------------|--------------------------------------------------------------|------------------------------|
-| `hearts.md`           | All text follows its tone/expressions/values                 | Default editorial tone       |
-| `logo.png` / `.svg`   | Logo placed on Cover + CTA slides                            | Text-based brand tag only    |
-| `templates/*.html`    | Slide uses HTML layout, tokens replaced with content          | Default generated layout     |
-| `templates/*.png/jpg` | Slide uses image as full-bleed background, text overlaid      | Default generated layout     |
-| HTML + Image both     | HTML takes priority; image used only if no HTML match         | Default generated layout     |
+| Component             | Effect When Present                                      | Effect When Absent        |
+| --------------------- | -------------------------------------------------------- | ------------------------- |
+| `hearts.md`           | All text follows its tone/expressions/values             | Default editorial tone    |
+| `logo.png` / `.svg`   | Logo placed on Cover + CTA slides                        | Text-based brand tag only |
+| `templates/*.html`    | Slide uses HTML layout, tokens replaced with content     | Default generated layout  |
+| `templates/*.png/jpg` | Slide uses image as full-bleed background, text overlaid | Default generated layout  |
+| HTML + Image both     | HTML takes priority; image used only if no HTML match    | Default generated layout  |
 
 ---
 
 ## Design Guidelines Summary
 
-| Principle           | Rule                                                    |
-|---------------------|---------------------------------------------------------|
-| Slide size          | 1080 × 1350px (4:5 Instagram)                         |
-| Typography          | Oversized headlines, editorial serif + tight sans-serif |
-| Colors              | Generated 10-step palette from theme.json only         |
-| Icons               | SVG or CSS only — no emojis                            |
-| Contrast            | WCAG AA minimum (4.5:1 text, 3:1 large text)          |
-| Spacing             | 8px grid system                                        |
-| Border radius       | 0px (editorial style default)                          |
-| Image handling      | `object-fit: cover`, relative path from `assets/`      |
-| Cover BG            | Full-bleed with gradient overlay for text readability  |
-| Logo                | `object-fit: contain`, height-constrained (40px)       |
-| Voice               | `souls/hearts.md` overrides default tone               |
-| Templates           | `souls/templates/` overrides default slide layouts     |
-| Export              | html2canvas → JSZip → .zip download                   |
-| Font loading        | Google Fonts with `display=swap`                       |
+| Principle      | Rule                                                    |
+| -------------- | ------------------------------------------------------- |
+| Slide size     | 1080 × 1350px (4:5 Instagram)                           |
+| Typography     | Oversized headlines, editorial serif + tight sans-serif |
+| Colors         | Generated 10-step palette from theme.json only          |
+| Icons          | SVG or CSS only — no emojis                             |
+| Contrast       | WCAG AA minimum (4.5:1 text, 3:1 large text)            |
+| Spacing        | 8px grid system                                         |
+| Border radius  | 0px (editorial style default)                           |
+| Image handling | `object-fit: cover`, relative path from `assets/`       |
+| Cover BG       | Full-bleed with gradient overlay for text readability   |
+| Logo           | `object-fit: contain`, height-constrained (40px)        |
+| Voice          | `souls/hearts.md` overrides default tone                |
+| Templates      | `souls/templates/` overrides default slide layouts      |
+| Export         | html2canvas → JSZip → .zip download                     |
+| Font loading   | Google Fonts with `display=swap`                        |
 
 ---
 
@@ -911,6 +946,7 @@ These are example user prompts this skill should handle:
 ## Checklist Before Delivery
 
 ### Required
+
 - [ ] `theme.json` exists and colors are valid hex
 - [ ] All 10-step brand and neutral palettes generated as CSS variables
 - [ ] Content sourced from `docs/news.md` or user prompt
@@ -925,12 +961,14 @@ These are example user prompts this skill should handle:
 - [ ] Preview scales properly on smaller screens
 
 ### If `assets/` present
+
 - [ ] Cover BG image (if named `cover.*`/`bg.*`) applied with dimmed overlay
 - [ ] Content images correctly mapped to slides sequentially
 - [ ] Images use `object-fit: cover` and relative paths
 - [ ] Cover BG images excluded from content slide mapping
 
 ### If `souls/` present
+
 - [ ] `hearts.md` voice guide applied to all generated text
 - [ ] Tone, expressions, values, and avoids all reflected in content
 - [ ] Logo placed on Cover + CTA with `object-fit: contain`
