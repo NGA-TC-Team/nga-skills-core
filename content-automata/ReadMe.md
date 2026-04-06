@@ -18,6 +18,331 @@ Gmail 뉴스레터 ┘
 
 ---
 
+## 사전 준비사항
+
+스킬을 처음 사용하기 전에 아래 항목을 순서대로 준비합니다.
+
+---
+
+### 1단계 — 필수 프로그램 설치
+
+#### Claude Code
+
+이 스킬을 실행하는 기반 환경입니다. 아직 없다면 먼저 설치합니다.
+
+- 다운로드: [claude.ai/code](https://claude.ai/code)
+
+#### Google Chrome
+
+Threads, X(Twitter) 피드를 수집할 때 사용합니다.  
+이미 설치되어 있다면 별도 조치 불필요합니다.
+
+- 다운로드: [google.com/chrome](https://www.google.com/chrome/)
+
+> 반드시 **Google Chrome**이어야 합니다. Safari, Firefox, Edge 등 다른 브라우저는 지원하지 않습니다.
+
+#### Python 3
+
+팩트 체크, DB 초기화, Threads 발행 스크립트가 Python 3로 작성되어 있습니다.
+
+**macOS** — 터미널에서 확인:
+```bash
+python3 --version
+# Python 3.x.x 가 출력되면 설치된 것
+```
+
+설치되어 있지 않다면:
+```bash
+# Homebrew가 있는 경우
+brew install python3
+
+# Homebrew가 없는 경우 → https://python.org/downloads 에서 설치
+```
+
+> **용어 설명**: *Homebrew*는 macOS에서 프로그램을 명령어 한 줄로 설치할 수 있게 해주는 패키지 관리자입니다. 없다면 [brew.sh](https://brew.sh)에서 먼저 설치합니다.
+
+**Windows** — [python.org/downloads](https://www.python.org/downloads/) 에서 설치.  
+설치 시 **"Add Python to PATH"** 체크박스를 반드시 선택합니다.
+
+#### Rust 툴체인 (macOS Intel / Linux / Windows만 해당)
+
+**macOS Apple Silicon(M1/M2/M3)은 건너뜁니다** — 사전 빌드된 바이너리가 포함되어 있습니다.
+
+macOS Intel, Linux, Windows에서 `nca` 도구를 직접 빌드할 때 필요합니다.
+
+**macOS / Linux:**
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+# 설치 후 터미널 재시작
+rustc --version   # 확인
+```
+
+**Windows** — [rustup.rs](https://rustup.rs) 에서 `rustup-init.exe` 다운로드 후 실행.
+
+> **용어 설명**: *Rust*는 프로그래밍 언어입니다. `nca` CLI 도구가 Rust로 만들어졌기 때문에, Apple Silicon 맥이 아닌 환경에서는 직접 빌드(컴파일)해야 합니다.
+
+---
+
+### 2단계 — CLI 프로그램 설치
+
+> **용어 설명**: *CLI(Command Line Interface)*는 터미널에서 명령어를 입력해 사용하는 도구입니다.
+
+#### nca — 콘텐츠 관리 도구 (이 스킬 전용)
+
+초안 조회·편집·발행을 담당하는 도구입니다.
+
+**macOS Apple Silicon (M1/M2/M3):**
+```bash
+NCA_BIN="$HOME/.claude/skills/content-automata/scripts/bin/nca-darwin-arm64"
+mkdir -p ~/.local/bin
+cp "$NCA_BIN" ~/.local/bin/nca
+chmod +x ~/.local/bin/nca
+```
+
+이후 `~/.local/bin`이 PATH에 있는지 확인합니다:
+```bash
+echo $PATH | grep -q ".local/bin" && echo "OK" || echo "PATH에 추가 필요"
+```
+
+PATH에 없다면 `~/.zshrc`에 아래 줄을 추가합니다:
+```bash
+export PATH="$HOME/.local/bin:$PATH"
+```
+저장 후 `source ~/.zshrc` 실행.
+
+**macOS Intel / Linux:**
+```bash
+~/.claude/skills/content-automata/scripts/bin/build.sh --install
+```
+
+**Windows (PowerShell):**
+```powershell
+& "$env:USERPROFILE\.claude\skills\content-automata\scripts\bin\build.ps1" -Install
+```
+
+설치 확인:
+```bash
+nca --version
+```
+
+#### gog — Google Workspace CLI
+
+Gmail 뉴스레터 수집과 이메일 발송에 사용합니다.
+
+**macOS:**
+```bash
+brew install gog
+# 또는
+pip3 install gog-cli
+```
+
+**Windows:**
+```powershell
+pip install gog-cli
+```
+
+설치 후 Google 계정 연결:
+```bash
+gog auth
+# 브라우저가 열리면 Google 계정으로 로그인
+```
+
+> `gog` 스킬이 별도로 설치되어 있어야 위 명령이 작동합니다. 아래 "3단계 — 스킬 설치" 참조.
+
+---
+
+### 3단계 — Claude Code 스킬 설치
+
+Claude Code에서 `/find-skills` 명령으로 검색하거나, 아래 스킬들을 직접 설치합니다.
+
+#### 필수 스킬
+
+| 스킬 | 용도 | 없을 때 |
+|------|------|---------|
+| **gog** | Gmail 뉴스레터 수집 + 이메일 발송 | 뉴스레터 수집 불가, 이메일 전송 불가 |
+| **Chrome DevTools MCP** | Threads/X 피드 수집 | Threads, X 수집 불가 |
+
+#### 선택 스킬
+
+| 스킬 | 용도 | 없을 때 |
+|------|------|---------|
+| **pinocchio** | 페르소나 기반 글쓰기 톤 설정 | 기본 페르소나로 대체됨 |
+
+스킬 설치 방법:
+```
+Claude Code에서 입력:
+/find-skills gog
+/find-skills pinocchio
+```
+
+#### Chrome DevTools MCP 설정
+
+Claude Code의 `settings.json`에 MCP 서버를 추가합니다.
+
+**macOS** (`~/.claude/settings.json`):
+```json
+{
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-chrome-devtools"]
+    }
+  }
+}
+```
+
+**Windows** (`%USERPROFILE%\.claude\settings.json`):
+```json
+{
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-chrome-devtools"]
+    }
+  }
+}
+```
+
+> **용어 설명**: *MCP(Model Context Protocol)*는 Claude가 외부 프로그램(Chrome 등)을 제어할 수 있게 해주는 연결 방식입니다. *npx*는 Node.js와 함께 설치되는 패키지 실행 도구입니다. `npx`가 없다면 [nodejs.org](https://nodejs.org)에서 Node.js를 설치합니다.
+
+---
+
+### 4단계 — API 키 발급 및 환경변수 설정
+
+> **용어 설명**: *API 키*는 외부 서비스에 접근할 때 사용하는 고유 비밀번호입니다. *환경변수*는 프로그램이 실행 중에 읽는 시스템 설정값입니다. 민감한 정보를 코드에 직접 쓰지 않고 안전하게 관리하는 방법입니다.
+
+#### API 키 목록
+
+| 키 이름 | 필수 여부 | 용도 | 발급 위치 |
+|---------|----------|------|----------|
+| `THREADS_ACCESS_TOKEN` | 발행 시 필수 | Threads에 글 게시 | Meta 개발자 콘솔 |
+| `THREADS_USER_ID` | 발행 시 필수 | Threads 계정 식별 | Meta 개발자 콘솔 |
+| `PERPLEXITY_API_KEY` | 선택 | 팩트 체크 | Perplexity AI 대시보드 |
+| `GEMINI_API_KEY` | 선택 | 이미지 생성 | Google AI Studio |
+| `GEMINI_IMAGE_MODEL` | 선택 | 이미지 모델 지정 | (값: `gemini-2.0-flash-exp`) |
+
+> 발행 기능을 쓰지 않는다면 `THREADS_ACCESS_TOKEN`, `THREADS_USER_ID` 없이도 수집·초안 작성·이메일 전송까지 모두 가능합니다.
+
+#### Threads API 키 발급 방법
+
+1. [developers.facebook.com](https://developers.facebook.com) 접속 후 로그인
+2. **My Apps → Create App → Business** 선택
+3. 앱 생성 후 **Threads API** 제품 추가
+4. **Threads API → 사용자 토큰 생성** 에서 장기 액세스 토큰(Long-lived Token) 발급
+5. **사용자 ID**는 토큰 발급 페이지 또는 Graph API Explorer에서 확인
+
+#### Perplexity API 키 발급 방법
+
+1. [perplexity.ai](https://www.perplexity.ai) 가입 후 로그인
+2. 우측 상단 프로필 → **API** 메뉴 이동
+3. **Generate** 버튼으로 키 생성
+4. `pplx-`로 시작하는 키를 복사
+
+#### Gemini API 키 발급 방법
+
+1. [aistudio.google.com](https://aistudio.google.com) 접속 (Google 계정 필요)
+2. 좌측 메뉴 **Get API key** 클릭
+3. **Create API key** 후 복사
+
+---
+
+#### 환경변수 설정 — macOS
+
+터미널을 열고 아래 명령으로 `~/.zshrc` 파일을 편집합니다:
+
+```bash
+open -e ~/.zshrc
+# 텍스트 편집기가 열리면 아래 내용을 파일 맨 아래에 추가
+```
+
+추가할 내용:
+```bash
+# content-automata 스킬 환경변수
+export THREADS_ACCESS_TOKEN="여기에_토큰_붙여넣기"
+export THREADS_USER_ID="여기에_유저ID_붙여넣기"
+export PERPLEXITY_API_KEY="pplx-여기에_키_붙여넣기"
+export GEMINI_API_KEY="AIza여기에_키_붙여넣기"
+```
+
+저장 후 적용:
+```bash
+source ~/.zshrc
+```
+
+확인:
+```bash
+echo $THREADS_ACCESS_TOKEN   # 토큰이 출력되면 정상
+```
+
+---
+
+#### 환경변수 설정 — Windows
+
+**방법 A: 시스템 설정 (GUI, 권장)**
+
+1. 시작 메뉴에서 **"환경 변수"** 검색 → **"시스템 환경 변수 편집"** 클릭
+2. 하단 **"환경 변수(N)..."** 버튼 클릭
+3. 위쪽 **"사용자 변수"** 영역에서 **"새로 만들기"** 클릭
+4. 변수 이름과 값을 입력 후 확인
+
+| 변수 이름 | 값 |
+|----------|-----|
+| `THREADS_ACCESS_TOKEN` | 발급받은 토큰 |
+| `THREADS_USER_ID` | 발급받은 유저 ID |
+| `PERPLEXITY_API_KEY` | 발급받은 키 |
+| `GEMINI_API_KEY` | 발급받은 키 |
+
+5. 설정 후 **터미널(PowerShell) 완전히 재시작** 필수
+
+**방법 B: PowerShell 명령어**
+
+```powershell
+[Environment]::SetEnvironmentVariable("THREADS_ACCESS_TOKEN", "여기에_토큰", "User")
+[Environment]::SetEnvironmentVariable("THREADS_USER_ID", "여기에_유저ID", "User")
+[Environment]::SetEnvironmentVariable("PERPLEXITY_API_KEY", "pplx-여기에_키", "User")
+[Environment]::SetEnvironmentVariable("GEMINI_API_KEY", "AIza여기에_키", "User")
+```
+
+확인:
+```powershell
+$env:THREADS_ACCESS_TOKEN   # 토큰이 출력되면 정상
+```
+
+---
+
+### 5단계 — 데이터베이스 초기화 (최초 1회)
+
+수집 데이터를 저장할 DB 파일을 생성합니다.
+
+**macOS / Linux:**
+```bash
+python3 ~/.claude/skills/content-automata/scripts/init_db.py
+# → "DB initialized at ..." 메시지가 나오면 성공
+```
+
+**Windows (PowerShell):**
+```powershell
+python "$env:USERPROFILE\.claude\skills\content-automata\scripts\init_db.py"
+```
+
+---
+
+### 준비 완료 체크리스트
+
+모두 완료했는지 확인합니다:
+
+- [ ] Claude Code 설치됨
+- [ ] Google Chrome 설치됨
+- [ ] Python 3 설치됨 (`python3 --version` 확인)
+- [ ] `nca` 설치됨 (`nca --version` 확인)
+- [ ] `gog` 설치 및 `gog auth` 완료
+- [ ] Chrome DevTools MCP 설정 완료 (`settings.json` 등록)
+- [ ] Threads API 키 환경변수 설정 완료 (발행 기능 사용 시)
+- [ ] Perplexity API 키 설정 완료 (팩트 체크 사용 시)
+- [ ] DB 초기화 완료 (`init_db.py` 실행)
+
+---
+
 ## 폴더 구조 설명
 
 ```
