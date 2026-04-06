@@ -1,0 +1,23 @@
+{
+  "user": {
+    "name": "단주",
+    "full_name": "임재호",
+    "email": "danju@starlight-sangdan.com"
+  },
+  "chrome": {
+    "profile_name": "Default",
+    "note": "Chrome DevTools MCP가 연결할 프로필. 크롬 실행 시 --remote-debugging-port=9222 필요."
+  },
+  "threads_publish": {
+    "env_token": "THREADS_ACCESS_TOKEN",
+    "env_user_id": "THREADS_USER_ID",
+    "note": "환경변수에 Threads API 토큰과 유저 ID가 export 되어 있어야 한다."
+  },
+  "gmail": {
+    "send_to_self": true,
+    "note": "gog gmail send 명령으로 자신에게 이메일을 보낸다."
+  },
+  "content_pool": {
+    "db_path": "~/.claude/skills/content-automata/data/content_pool.db"
+  }
+}

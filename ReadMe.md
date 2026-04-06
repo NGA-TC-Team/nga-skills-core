@@ -10,3 +10,4 @@
 | [card-news-skill](./card-news-skill) | 카드뉴스 생성 | - |
 | [figma-extract-tokens](./figma-extract-tokens) | Figma 파일에서 디자인 토큰 추출 | `./figma-extract-tokens/install.sh` |
 | [pinocchio](./pinocchio) | AI 에이전트 페르소나 생성기 (G·H·E·R 4요소) | `./pinocchio/install.sh` |
+| [content-automata](./content-automata) | AI·자동화 콘텐츠 수집·분류·초안 작성·이메일·쓰레드 발행 파이프라인 | - |

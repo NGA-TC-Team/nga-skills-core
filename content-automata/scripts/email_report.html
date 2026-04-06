@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>콘텐츠 자동화 — 오늘의 초안 7선</title>
+<style>
+  body { font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; background: #f5f5f5; margin: 0; padding: 20px; color: #1a1a1a; }
+  .container { max-width: 640px; margin: 0 auto; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: #fff; padding: 32px 28px; }
+  .header h1 { margin: 0 0 8px; font-size: 22px; font-weight: 700; }
+  .header .date { font-size: 14px; opacity: 0.8; }
+  .header .stats { margin-top: 16px; display: flex; gap: 32px; font-size: 13px; }
+  .header .stats span { background: rgba(255,255,255,0.15); padding: 6px 16px; border-radius: 20px; }
+  .content { padding: 28px; }
+  .draft { margin-bottom: 28px; border-left: 3px solid #e8e8e8; padding-left: 20px; }
+  .draft.breaking { border-left-color: #ff6b6b; }
+  .draft.column { border-left-color: #4ecdc4; }
+  .draft-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .draft-number { width: 28px; height: 28px; border-radius: 50%; display: inline-block; text-align: center; line-height: 28px; font-size: 14px; font-weight: 700; color: #fff; vertical-align: middle; }
+  .breaking .draft-number { background: #ff6b6b; }
+  .column .draft-number { background: #4ecdc4; }
+  .draft-type { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .breaking .draft-type { color: #ff6b6b; }
+  .column .draft-type { color: #4ecdc4; }
+  .draft-title { font-size: 17px; font-weight: 700; margin-bottom: 12px; }
+  .draft-body { font-size: 15px; line-height: 1.7; white-space: pre-wrap; color: #333; }
+  .draft-sources { margin-top: 12px; font-size: 12px; color: #888; }
+  .draft-sources a { color: #4a90d9; text-decoration: none; border-bottom: 1px solid rgba(74,144,217,.3); }
+  .draft-sources a:hover { border-bottom-color: #4a90d9; }
+  .draft-sources ul { list-style: none; padding: 0; margin: 6px 0 0; }
+  .draft-sources li { padding: 4px 0; }
+  .draft-sources li::before { content: "→ "; color: #bbb; }
+  .footer { padding: 20px 28px; background: #fafafa; border-top: 1px solid #eee; text-align: center; font-size: 12px; color: #999; }
+  hr { border: none; border-top: 1px solid #eee; margin: 0; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>{{REPORT_TITLE}}</h1>
+    <div class="date">{{REPORT_DATE}}</div>
+    <div class="stats">
+      <span>수집 소스 {{TOTAL_SOURCES}}개</span>
+      <span>초안 {{DRAFT_COUNT}}개</span>
+      <span>수집 기간 {{PERIOD}}</span>
+    </div>
+  </div>
+  <div class="content">
+    {{DRAFTS_HTML}}
+  </div>
+  <div class="footer">
+    content-automata | 자동 생성된 콘텐츠 초안 리포트
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,118 @@
+{
+  "version": 1,
+  "sources": [
+    {
+      "id": "testingcatalog",
+      "name": "TestingCatalog AI News",
+      "type": "web",
+      "enabled": true,
+      "url": "https://testingcatalog.com",
+      "collect": {
+        "method": "web_fetch",
+        "list_count": 5,
+        "per_article": true,
+        "extract": ["title", "url", "summary"]
+      },
+      "agent": "web-collector"
+    },
+    {
+      "id": "geeknews",
+      "name": "GeekNews",
+      "type": "web",
+      "enabled": true,
+      "url": "https://news.hada.io",
+      "collect": {
+        "method": "web_fetch",
+        "list_count": 5,
+        "per_article": true,
+        "follow_original_link": true,
+        "extract": ["title", "url", "original_url", "summary"]
+      },
+      "agent": "web-collector"
+    },
+    {
+      "id": "threads",
+      "name": "Threads AI/자동화 계정",
+      "type": "chrome",
+      "enabled": true,
+      "platform": "threads",
+      "collect": {
+        "method": "chrome_devtools",
+        "scroll_feed": true,
+        "post_count": 20,
+        "recency": "7d",
+        "exclude_ads": true,
+        "extract": ["author", "text", "timestamp", "url"]
+      },
+      "accounts": [
+        "@choi.openai", "@aicoffeechat", "@ai.trend.kr", "@aikorea24",
+        "@powerblog", "@ai.sparkup", "@geumverse_ai", "@youtubejocoding",
+        "@naminsoo_ai", "@easygpt2526", "@ai.sadari", "@yoonkwon_ai",
+        "@mapilnyeo", "@specal1849", "@quady.openai",
+        "@korea.gpt.association", "@korea_creator_academy", "@twinkle_haeri",
+        "@chatgpt_dohye", "@happyangel761212", "@ha_ma_dam", "@steady_jinhee",
+        "@sieun_ssam", "@star.d.ssaem", "@loreenkim.ceo", "@inner_lead",
+        "@taehyeong_lim", "@ai.devman", "@schoolfolio.im2",
+        "@yun_ja_dong", "@mceo.atm", "@qjc.ai", "@anyway_n8n",
+        "@nomadlab_ai", "@kooky.ai", "@genspark_korea", "@atm.ha.muck",
+        "@webfit.ceo", "@ai_tusol", "@personab_agency"
+      ],
+      "agent": "chrome-collector"
+    },
+    {
+      "id": "x_feed",
+      "name": "X(Twitter) AI 피드",
+      "type": "chrome",
+      "enabled": true,
+      "platform": "x",
+      "collect": {
+        "method": "chrome_devtools",
+        "scroll_feed": true,
+        "post_count": 20,
+        "recency": "7d",
+        "exclude_ads": true,
+        "extract": ["author", "text", "timestamp", "url", "engagement"]
+      },
+      "agent": "chrome-collector"
+    },
+    {
+      "id": "newsletter_uncovering_ai",
+      "name": "Uncovering AI",
+      "type": "email",
+      "enabled": true,
+      "optional": true,
+      "collect": {
+        "method": "gog_gmail",
+        "search_query": "from:uncovering-ai newer_than:7d",
+        "extract": ["subject", "body_summary"]
+      },
+      "agent": "email-collector"
+    },
+    {
+      "id": "newsletter_simplifying_ai",
+      "name": "Simplifying AI",
+      "type": "email",
+      "enabled": true,
+      "optional": true,
+      "collect": {
+        "method": "gog_gmail",
+        "search_query": "from:simplifying-ai newer_than:7d",
+        "extract": ["subject", "body_summary"]
+      },
+      "agent": "email-collector"
+    },
+    {
+      "id": "newsletter_the_information",
+      "name": "The Information 뉴스레터",
+      "type": "email",
+      "enabled": true,
+      "optional": true,
+      "collect": {
+        "method": "gog_gmail",
+        "search_query": "from:theinformation newer_than:7d",
+        "extract": ["subject", "body_summary"]
+      },
+      "agent": "email-collector"
+    }
+  ]
+}
