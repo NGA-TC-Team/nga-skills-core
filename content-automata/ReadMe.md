@@ -9,9 +9,10 @@
 콘텐츠를 매번 직접 찾아보고, 정리하고, 글 초안을 쓰는 작업을 자동화합니다.
 
 ```
-웹사이트      ┐
-Threads 피드  ├──▶ 수집 ──▶ 분류·요약 ──▶ 초안 7개 ──▶ 이메일 전송
-Gmail 뉴스레터 ┘
+웹사이트 (TestingCatalog, GeekNews) ┐
+Threads 피드                        ├──▶ 수집 ──▶ 분류·요약 ──▶ 초안 7개 ──▶ 이메일 전송
+X(Twitter) 피드                     ┤
+Gmail 뉴스레터                       ┘
 ```
 
 한 번 명령하면 Claude가 알아서 뉴스를 읽고, 중요한 것을 골라 글 초안까지 써서 보내줍니다.
@@ -340,6 +341,20 @@ python "$env:USERPROFILE\.claude\skills\content-automata\scripts\init_db.py"
 - [ ] Threads API 키 환경변수 설정 완료 (발행 기능 사용 시)
 - [ ] Perplexity API 키 설정 완료 (팩트 체크 사용 시)
 - [ ] DB 초기화 완료 (`init_db.py` 실행)
+
+---
+
+### 공식 다운로드 링크 모음
+
+| 도구 | 공식 링크 | 비고 |
+|------|-----------|------|
+| **Claude Code** | [claude.com/download](https://claude.com/download) | Mac, Windows 지원 |
+| **Google Chrome** | [google.com/chrome](https://www.google.com/chrome/) | Mac, Windows 지원 |
+| **Python 3** | [python.org/downloads](https://www.python.org/downloads/) | Mac, Windows 지원 |
+| **Rust (rustup)** | [rustup.rs](https://rustup.rs/) | Mac Intel/Linux/Windows용 (Apple Silicon 불필요) |
+| **Homebrew** | [brew.sh](https://brew.sh/) | macOS 패키지 관리자 (Mac 전용) |
+| **Node.js** | [nodejs.org](https://nodejs.org/) | Chrome DevTools MCP 실행에 필요한 npx 포함 |
+| **gog CLI** | [gogcli.sh](https://gogcli.sh/) · [GitHub](https://github.com/steipete/gogcli) | Gmail·캘린더·드라이브 CLI |
 
 ---
 
