@@ -10,6 +10,8 @@ description: |
   - "넥스트 타이탄 댓글 달아줘 / 지워줘"
   - "Next Titan API로 [작업]"
   - "NT 콘텐츠 자동화", "사이트에 글 발행"
+  - "에이전트 스킬 [등록 / 추가 / 한글 번역 추가]" — agentSkill 타입 처리
+  - SKILL.md 마크다운을 받아 사이트에 등록해달라는 요청
   - 콘텐츠 자동화, 발행 스케줄링, 커뮤니티 운영 관련 요청
 
   이 스킬은 Next Titan 운영 자동화와 관련된 모든 요청에서 사용해야 한다.
@@ -68,11 +70,15 @@ Next Titan에서 어떤 작업을 할까요?
 5. 예약 발행 설정
 6. 예약 발행 취소
 
+[에이전트 스킬]
+7. 에이전트 스킬 등록 (SKILL.md 마크다운 → 콘텐츠)
+8. 에이전트 스킬 한글 번역 추가/수정 (bodyKo)
+
 [댓글]
-7. 댓글 목록 조회
-8. 댓글 작성
-9. 댓글 수정
-10. 댓글 삭제
+9. 댓글 목록 조회
+10. 댓글 작성
+11. 댓글 수정
+12. 댓글 삭제
 
 번호 또는 원하는 작업을 말씀해 주세요.
 ```
@@ -141,12 +147,13 @@ curl -s -X POST \
 - `event` → `eventStartAt`, `eventEndAt`, `location`
 - `resource` → `url`
 - `prompt` → `promptType`
+- `agentSkill` → `bodyKo` (한글 번역 본문, 있으면), `skillVersion` (있으면)
 
 ### 자동으로 채울 것 (묻지 않음)
 
 | 필드 | 자동 기본값 |
 |---|---|
-| `status` | `draft` |
+| `status` | **반드시 페이로드에 명시한다.** "올려줘 / 발행해줘 / 등록해줘 / 업로드 / 게시 / 포스팅" → `"published"`. "초안으로 / 임시저장 / 나중에 발행" → `"draft"`. "예약" → `"draft"` + `scheduledPublishAt`. 의도가 불분명할 때만 1회 질문한다. **status 누락 = 서버 default `draft` = 카드 날짜 미표시.** |
 | `sort` | `-createdAt` |
 | `page` | `1` |
 | `limit` | `20` |
@@ -158,6 +165,36 @@ curl -s -X POST \
 | `scheduledPublishAt` 포맷 | 사용자가 날짜/시간만 말하면 → `ISO 8601 +09:00` 자동 변환 |
 | `summary` | 본문 앞 150자로 자동 생성 (사용자가 제공하지 않은 경우) |
 | `tags` | 본문 내용 기반으로 제안 → 확인 요청 (단, 사용자가 "알아서 해줘"라고 하면 확인 없이 사용) |
+
+### 날짜 필드 주의 (중요: 카드에 날짜가 안 뜨는 문제 방지)
+
+공개 페이지의 발행일 라벨은 `publishedAt` 기준이다. **`publishedAt`이 비어 있으면 카드/리스트에서 날짜가 표시되지 않는다.** 자주 발생하는 누락 원인과 회피 규칙:
+
+1. **CREATE 시 status 누락 금지** — `status`를 안 보내면 서버는 `draft`로 저장하고 `publishedAt`은 NULL이다. "올려줘 / 등록 / 발행 / 게시 / 업로드 / 포스팅" 중 하나라도 사용자가 말했다면, **CREATE 페이로드에 반드시 `"status": "published"`를 명시**한다.
+2. **PATCH로 발행 전환 시에도 status 명시** — draft를 published로 바꿀 때도 `"status": "published"`를 PATCH 본문에 포함해야 한다. 이때 기존 `publishedAt`이 NULL이면 API가 현재 시각으로 자동 세팅한다.
+3. **예약 발행** — `scheduledPublishAt`만 세팅하고 status는 자동으로 `draft`가 된다. 크론이 발행 시점에 `publishedAt`을 채운다.
+
+#### 발행 검증 (모든 발행 작업 직후 필수 실행)
+
+CREATE/PATCH로 published 상태를 의도한 직후 반드시 다음을 호출해 `publishedAt`을 확인한다:
+
+```bash
+curl -s -H "X-API-KEY: $NEXT_TITAN_API_KEY" \
+  "$NEXT_TITAN_BASE_URL/api/external/contents/read?id={id}" \
+  | jq '{id, status, publishedAt}'
+```
+
+- `publishedAt`이 `null`이고 `status`가 `published`면 즉시 보정 PATCH를 보낸다:
+
+```bash
+curl -s -X PATCH \
+  -H "X-API-KEY: $NEXT_TITAN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"id": <id>, "status": "published"}' \
+  "$NEXT_TITAN_BASE_URL/api/external/contents/update"
+```
+
+- 보정 후 다시 read 호출로 `publishedAt`이 채워졌는지 확인한 뒤 출력 형식의 결과 메시지를 사용자에게 보여준다.
 
 ### 사용자 재정의 허용
 
@@ -192,11 +229,16 @@ GET /api/external/contents
 - `column` → `columnCategory`: `aiBusiness | aiTool | trend`
 - `resource` → `resourceType`: `tool | article | video | repository | course | other`
 
+`type=agentSkill`로 list 조회 시 응답 항목에 `skillVersion`이 포함된다 (값이 있을 때).
+
 ### 콘텐츠 상세 조회
 
 ```
 GET /api/external/contents/read?id={id}
 ```
+
+응답에는 공통 `markdown` 외에 타입별 전용 필드가 추가로 포함된다.
+`agentSkill`인 경우 `markdownKo` (한글 번역 마크다운, 없으면 `null`)와 `skillVersion`, `skillAuthorHandle`, `skillIconColor`가 함께 반환된다.
 
 ### 콘텐츠 생성
 
@@ -212,7 +254,7 @@ POST /api/external/contents/create
 | `type` | ✅ | 수동 |
 | `body` | | 수동 (Markdown 문자열 가능) |
 | `summary` | | 자동 (본문 앞 150자) |
-| `status` | | 자동 (`draft`) |
+| `status` | ✅ (의도가 발행이면 필수) | "올려줘/발행/포스팅" → `"published"`, "초안" → `"draft"` — 페이로드에 반드시 명시 (섹션 3 "날짜 필드 주의" 참고) |
 | `tags` | | 자동 제안 후 확인 |
 | `category` | | 필요 시만 질문 |
 | `featuredImage` | | 필요 시만 질문 |
@@ -276,6 +318,32 @@ POST /api/external/contents/schedule/cancel
 | `announcement` | 공지사항 | `announcementSubtype` |
 | `showOff` | 자랑하기 | - |
 | `greeting` | 가입인사 | - |
+| `agentSkill` | 에이전트 스킬 | `bodyKo` (한글 번역 본문, 마크다운 문자열도 가능), `skillVersion`, `skillAuthorHandle`, `skillIconColor` (`emerald \| sky \| amber \| orange \| violet \| rose`) |
+
+#### `agentSkill` 처리 규칙
+
+- 본문 `body`는 SKILL.md 원문(영문 또는 원어). 마크다운 문자열을 보내면 자동으로 Lexical JSON으로 변환된다.
+- `bodyKo`는 한글 번역 본문. 마크다운 문자열도 동일하게 자동 변환된다. 없으면 상세 페이지에서 "한글 번역" 탭이 비활성화된다.
+- `skillVersion`은 제목 옆 뱃지로 노출된다. 예: `v2.1.1`.
+- `skillAuthorHandle`이 있으면 리스트/카드의 `@핸들`로 사용된다 (없으면 작성자 정보 fallback).
+- `skillIconColor`는 6개 옵션 중 하나. 비우면 기본 `sky`.
+
+생성 예시:
+
+```json
+{
+  "title": "Senior Devops",
+  "type": "agentSkill",
+  "summary": "Comprehensive DevOps skill for CI/CD ...",
+  "body": "# Senior Devops\n\nComplete toolkit ...",
+  "bodyKo": "# 시니어 데브옵스\n\n현대적인 도구 ...",
+  "skillVersion": "v2.1.1",
+  "skillAuthorHandle": "alirezarezvani",
+  "skillIconColor": "emerald",
+  "tags": ["devops", "cicd"],
+  "status": "published"
+}
+```
 
 ---
 
